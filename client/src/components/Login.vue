@@ -3,7 +3,7 @@
       <v-flex>
        <div class="white elevation-2">
          <v-toolbar class="cyan" dark flat dense>
-           <v-toolbar-title>Register</v-toolbar-title>
+           <v-toolbar-title>Login</v-toolbar-title>
          </v-toolbar>
 
          <div class="pl-4 pr-4 pt-2 pb-2">
@@ -18,11 +18,10 @@
           ></v-text-field>
          </div>
          <br>
-         <div v-if="isRegister" class="success">Register Success!</div>
-         <div v-html="error" class="error" v-if="isError"></div>
+         <div v-html="error" class="error"></div>
          <v-btn
           color="info"
-          @click="register">Register</v-btn>
+          @click="login">Login</v-btn>
        </div>
       </v-flex>
     </v-layout>
@@ -35,27 +34,20 @@ export default {
     return {
       email: '',
       password: '',
-      error: null,
-      isRegister: false,
-      isError: true
+      error: null
     }
   },
   methods: {
-    async register () {
+    async login () {
       try {
-        const res = await AuthenticationService.register({
+        const res = await AuthenticationService.login({
           email: this.email,
           password: this.password
         })
-        console.log(res)
         this.$store.dispatch('setToken', res.data.token)
         this.$store.dispatch('setUser', res.data.user)
-        this.isRegister = true
-        this.isError = false
       } catch (error) {
         this.error = error.response.data.error
-        this.isRegister = false
-        this.isError = true
       }
     }
   }
